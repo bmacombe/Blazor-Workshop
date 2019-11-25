@@ -32,5 +32,17 @@ namespace BlazorWrokshop.Pages
                                 select x).First();
             await CustomerSelectEvent.InvokeAsync(SelectedCustomer);
         }
+
+        public string NewCustomerName = "";
+
+
+        [Parameter]
+        public EventCallback<string> AddCustomerEvent { get; set; }
+
+
+        public async Task CustomerAdding()
+        {
+            await AddCustomerEvent.InvokeAsync(NewCustomerName);
+        }
     }
 }

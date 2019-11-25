@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
@@ -45,6 +46,17 @@ namespace BlazorWrokshop.Data
             catch (Exception ex)
             {
                 return new Customer();
+            }
+        }
+
+        public static async Task AddCustomer(Customer Customer)
+        {
+            using (var http = new HttpClient())
+            {
+                var uri = new Uri(baseURL + "api/customer");
+                string json = JsonConvert.SerializeObject(Customer);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                await http.PostAsync(uri, content);
             }
         }
     }

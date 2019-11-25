@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace BlazorWrokshop.Controllers
 {
@@ -11,27 +12,59 @@ namespace BlazorWrokshop.Controllers
     [ApiController]
     public class CustomerController : ControllerBase
     {
+        public CustomerController()
+        {
+            LoadData();
+        }
+
+        private List<Customer> Customers;
+        private string customerDataFile = "";
+
+        private void LoadData()
+        {
+            customerDataFile = Environment.CurrentDirectory + @"\customers.json";
+            if (!System.IO.File.Exists(customerDataFile))
+            {
+                Customers = GetAllCustomers();
+                SaveData();
+            }
+            else
+            {
+                var json = System.IO.File.ReadAllText(customerDataFile);
+                Customers = JsonConvert.DeserializeObject<List<Customer>>(json);
+            }
+        }
+
+
+        private void SaveData()
+        {
+            var json = JsonConvert.SerializeObject(Customers);
+            System.IO.File.WriteAllText(customerDataFile, json);
+        }
+
         // GET: api/Customer
         [HttpGet]
         public IEnumerable<Customer> Get()
         {
-            return GetAllCustomers();
+            return Customers;
         }
+
 
         // GET: api/Customer/5
         [HttpGet("{id}", Name = "Get")]
         public Customer Get(int id)
         {
-            var customers = GetAllCustomers();
-            return (from x in customers
+            return (from x in Customers
                 where x.CustomerId == id
                 select x).FirstOrDefault();
         }
 
-        // POST: api/Customers
+        // POST: api/Customer
         [HttpPost]
-        public void Post([FromBody] string value)
+        public void Post([FromBody] Customer value)
         {
+            Customers.Add(value);
+            SaveData();
         }
 
         // PUT: api/Customers/5
@@ -46,7 +79,7 @@ namespace BlazorWrokshop.Controllers
         {
         }
 
-        private IEnumerable<Customer> GetAllCustomers()
+        private List<Customer> GetAllCustomers()
         {
             var Customers = new List<Customer>();
             Customers.Add(new Customer

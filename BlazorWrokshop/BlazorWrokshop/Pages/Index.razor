@@ -6,6 +6,7 @@ Customers:
 <TestComponent Customers="Customers"
                SelectedCustomer ="SelectedCustomer"
                CustomerSelectEvent="CustomerSelected"
+               AddCustomerEvent="CustomerAdding"
                CustomerResetEvent="CustomerResetting">
 </TestComponent>
 
@@ -48,5 +49,17 @@ Customers:
                 x => x.CustomerId == CustomerId)] = originalCustomer;
             SelectedCustomer = originalCustomer;
         }
+    }
+
+    async Task CustomerAdding(string Name)
+    {
+        var highest = Customers.OrderByDescending(i => i.CustomerId).Take(1).First();
+        var customer = new Customer()
+        {
+            CustomerId = highest.CustomerId + 1,
+            Name = Name
+        };
+        await CustomerService.AddCustomer(customer);
+        Customers = await CustomerService.GetAllCustomers();
     }
 }
