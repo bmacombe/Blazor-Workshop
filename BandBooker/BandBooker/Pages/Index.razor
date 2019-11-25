@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using BandBooker.Data
 @using BandBookerData;
 @using BandBookerData.Models;
 @using Microsoft.AspNetCore.Components;
@@ -11,7 +12,7 @@
     @foreach (var instrument in AllInstruments)
     {
         @if (SelectedInstrument != null
- && instrument.InstrumentId == SelectedInstrument.InstrumentId)
+&& instrument.InstrumentId == SelectedInstrument.InstrumentId)
         {
             <option selected value="@instrument.InstrumentId.ToString()">
                 @instrument.Name
@@ -92,17 +93,15 @@
 
 <span style="color:red;">@MusicianErrorMessage</span>
 <MusicianEditor @ref="musicianEditor"
-                 CancelPressed="EditMusicianCancelled"
-                 MusicianAdded="MusicianAdded"
-                 MusicianUpdated="MusicianUpdated"
-                >
+                CancelPressed="EditMusicianCancelled"
+                MusicianAdded="MusicianAdded"
+                MusicianUpdated="MusicianUpdated">
 </MusicianEditor>
 <br />
 <br />
 
 @code {
-
-
+    
     #region Instruments
 
 
@@ -152,13 +151,6 @@
         DisableInstrumentEditButton = false;
         instrumentEditor.Hide();
     }
-
-
-    protected override void OnInitialized()
-    {
-        AllInstruments = DataManager.Instruments;
-    }
-
 
     void InstrumentSelected(ChangeEventArgs args)
     {
@@ -213,107 +205,112 @@
     }
     #endregion
 
-        #region Musicians
-    
-    string MusicianErrorMessage = "";
-    Musician SelectedMusician;
-    MusicianEditor musicianEditor;
-    bool DisableMusicianControls = false;
-    bool DisableMusicianEditButton = true;
+    #region Musicians
+
+    string MusicianErrorMessage = "";
+    Musician SelectedMusician;
+    MusicianEditor musicianEditor;
+    bool DisableMusicianControls = false;
+    bool DisableMusicianEditButton = true;
 
 
-    void EditMusicianCancelled(string message)
-    {
-        if (SelectedMusician != null)
-        {
-            SelectedMusician =
-                (from x in DataManager.Musicians
-                 where x.MusicianId == SelectedMusician.MusicianId
-                 select x).FirstOrDefault();
+    void EditMusicianCancelled(string message)
+    {
+        if (SelectedMusician != null)
+        {
+            SelectedMusician =
+               (from x in DataManager.Musicians
+                where x.MusicianId == SelectedMusician.MusicianId
+                select x).FirstOrDefault();
 
 
-        }
-        DisableMusicianControls = false;
-        DisableMusicianEditButton = (SelectedMusician == null);
-    }
+        }
+        DisableMusicianControls = false;
+        DisableMusicianEditButton = (SelectedMusician == null);
+    }
 
 
-    void MusicianAdded(Musician Musician)
-    {
-        DataManager.AddMusician(Musician);
-        DisableMusicianControls = false;
-        DisableMusicianEditButton = (SelectedMusician == null);
-        musicianEditor.Hide();
-        MusicianErrorMessage = "";
-    }
+    void MusicianAdded(Musician Musician)
+    {
+        DataManager.AddMusician(Musician);
+        DisableMusicianControls = false;
+        DisableMusicianEditButton = (SelectedMusician == null);
+        musicianEditor.Hide();
+        MusicianErrorMessage = "";
+    }
 
 
-    void MusicianUpdated(Musician musician)
-    {
-        SelectedMusician = DataManager.UpdateMusician(musician);
-        DisableMusicianControls = false;
-        DisableMusicianEditButton = false;
-        musicianEditor.Hide();
-    }
+    void MusicianUpdated(Musician musician)
+    {
+        SelectedMusician = DataManager.UpdateMusician(musician);
+        DisableMusicianControls = false;
+        DisableMusicianEditButton = false;
+        musicianEditor.Hide();
+    }
 
 
-    void MusicianSelected(Microsoft.AspNetCore.Components.ChangeEventArgs args)
-    {
-        SelectMusicianById(Convert.ToInt32(args.Value));
-    }
+    void MusicianSelected(Microsoft.AspNetCore.Components.ChangeEventArgs args)
+    {
+        SelectMusicianById(Convert.ToInt32(args.Value));
+    }
 
 
-    void SelectMusicianById(int Id)
-    {
-        MusicianErrorMessage = "";
+    void SelectMusicianById(int Id)
+    {
+        MusicianErrorMessage = "";
 
 
-        SelectedMusician =
-            (from x in DataManager.Musicians
-             where x.MusicianId.ToString() == Id.ToString()
-             select x).FirstOrDefault();
+        SelectedMusician =
+           (from x in DataManager.Musicians
+            where x.MusicianId.ToString() == Id.ToString()
+            select x).FirstOrDefault();
 
 
-        if (SelectedMusician != null)
-        {
-            DisableMusicianEditButton = false;
-        }
-        else
-            DisableMusicianEditButton = true;
-    }
+        if (SelectedMusician != null)
+        {
+            DisableMusicianEditButton = false;
+        }
+        else
+            DisableMusicianEditButton = true;
+    }
 
 
-    async Task NewMusicianButtonClick()
-    {
-        MusicianErrorMessage = "";
-        DisableMusicianControls = true;
-        DisableMusicianEditButton = true;
-        await musicianEditor.NewMusician(DataManager.Instruments);
-    }
+    async Task NewMusicianButtonClick()
+    {
+        MusicianErrorMessage = "";
+        DisableMusicianControls = true;
+        DisableMusicianEditButton = true;
+        await musicianEditor.NewMusician(DataManager.Instruments);
+    }
 
 
-    async Task EditMusicianButtonClick()
-    {
-        DisableMusicianControls = true;
-        DisableMusicianEditButton = true;
-        await musicianEditor.EditMusician(DataManager.Instruments,
-            SelectedMusician);
-    }
+    async Task EditMusicianButtonClick()
+    {
+        DisableMusicianControls = true;
+        DisableMusicianEditButton = true;
+        await musicianEditor.EditMusician(DataManager.Instruments,
+          SelectedMusician);
+    }
 
 
-    void DeleteMusicianButtonClick()
-    {
-        if (SelectedMusician != null)
-        {
-            MusicianErrorMessage =
-                DataManager.DeleteMusician(SelectedMusician, false);
-            if (DataManager.Musicians.Count == 1)
-            {
-                SelectedMusician = DataManager.Musicians.First();
-            }
-        }
-    }
+    void DeleteMusicianButtonClick()
+    {
+        if (SelectedMusician != null)
+        {
+            MusicianErrorMessage =
+              DataManager.DeleteMusician(SelectedMusician, false);
+            if (DataManager.Musicians.Count == 1)
+            {
+                SelectedMusician = DataManager.Musicians.First();
+            }
+        }
+    }
 
 
-    #endregion
+    #endregion
+
+    protected override async Task OnInitializedAsync()
+    {
+        AllInstruments = await ApiService.GetInstruments();
+    }
 }
