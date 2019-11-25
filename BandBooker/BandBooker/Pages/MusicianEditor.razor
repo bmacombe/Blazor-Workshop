@@ -134,19 +134,27 @@
 @code {
 
 
-    private List<Instrument> AllInstruments { get; set; }
+    private List<Instrument>
+    AllInstruments
+    { get; set; }
 
 
     [Parameter]
-    public EventCallback<string> CancelPressed { get; set; }
+    public EventCallback<string>
+        CancelPressed
+    { get; set; }
 
 
     [Parameter]
-    public EventCallback<Musician> MusicianAdded { get; set; }
+    public EventCallback<Musician>
+        MusicianAdded
+    { get; set; }
 
 
     [Parameter]
-    public EventCallback<Musician> MusicianUpdated { get; set; }
+    public EventCallback<Musician>
+        MusicianUpdated
+    { get; set; }
 
 
     Musician Musician { get; set; } = new Musician();
@@ -173,7 +181,7 @@
 
 
         foreach (var file in await
-         fileReaderService.CreateReference(inputTypeFileElement).EnumerateFilesAsync())
+        fileReaderService.CreateReference(inputTypeFileElement).EnumerateFilesAsync())
         {
             // Read into buffer and act (uses less memory)
             using (Stream stream = await file.OpenReadAsync())
@@ -253,30 +261,31 @@
 
 
     void InstrumentSelectedFromMusician(
-      Microsoft.AspNetCore.Components.ChangeEventArgs args)
+    Microsoft.AspNetCore.Components.ChangeEventArgs args)
     {
         SelectedInstrument =
-           (from x in AllInstruments
-            where x.InstrumentId == Convert.ToInt32(args.Value)
-            select x).FirstOrDefault();
+        (from x in AllInstruments
+         where x.InstrumentId == Convert.ToInt32(args.Value)
+         select x).FirstOrDefault();
         RemoveSelectedInstrumentButtonDisabled = false;
         AddSelectedInstrumentButtonDisabled = true;
     }
 
 
     void InstrumentSelectedFromMaster(
-      Microsoft.AspNetCore.Components.ChangeEventArgs args)
+    Microsoft.AspNetCore.Components.ChangeEventArgs args)
     {
         SelectedInstrument =
-           (from x in AllInstruments
-            where x.InstrumentId == Convert.ToInt32(args.Value)
-            select x).FirstOrDefault();
+        (from x in AllInstruments
+         where x.InstrumentId == Convert.ToInt32(args.Value)
+         select x).FirstOrDefault();
         AddSelectedInstrumentButtonDisabled = false;
         RemoveSelectedInstrumentButtonDisabled = true;
     }
 
 
-    public async Task NewMusician(List<Instrument> Instruments)
+    public async Task NewMusician(List<Instrument>
+        Instruments)
     {
         this.Musician = new Musician();
         AllInstruments = Instruments;
@@ -287,7 +296,8 @@
     }
 
 
-    public async Task EditMusician(List<Instrument> Instruments, Musician Musician)
+    public async Task EditMusician(List<Instrument>
+        Instruments, Musician Musician)
     {
         AllInstruments = Instruments;
         Adding = false;
