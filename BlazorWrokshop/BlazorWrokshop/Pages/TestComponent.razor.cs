@@ -43,6 +43,21 @@ namespace BlazorWrokshop.Pages
         public async Task CustomerAdding()
         {
             await AddCustomerEvent.InvokeAsync(NewCustomerName);
+            NewCustomerName = string.Empty;
+        }
+
+        [Parameter]
+        public EventCallback<Customer> UpdateCustomerEvent { get; set; }
+        public async Task UpdateButtonClicked()
+        {
+            await UpdateCustomerEvent.InvokeAsync(SelectedCustomer);
+        }
+
+        [Parameter]
+        public EventCallback<Customer> DeleteCustomerEvent { get; set; }
+        public async Task DeleteButtonClicked()
+        {
+            await DeleteCustomerEvent.InvokeAsync(SelectedCustomer);
         }
     }
 }

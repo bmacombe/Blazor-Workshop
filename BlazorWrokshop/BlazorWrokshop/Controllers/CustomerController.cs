@@ -67,16 +67,23 @@ namespace BlazorWrokshop.Controllers
             SaveData();
         }
 
-        // PUT: api/Customers/5
+        // PUT: api/Customer/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public void Put(int id, [FromBody] Customer value)
         {
+            // replace the customer
+            Customers[Customers.FindIndex(
+                x => x.CustomerId == id)] = value;
+            SaveData();
         }
 
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+            Customers.RemoveAt(Customers.FindIndex(
+                x => x.CustomerId == id));
+            SaveData();
         }
 
         private List<Customer> GetAllCustomers()

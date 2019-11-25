@@ -7,7 +7,9 @@ Customers:
                SelectedCustomer ="SelectedCustomer"
                CustomerSelectEvent="CustomerSelected"
                AddCustomerEvent="CustomerAdding"
-               CustomerResetEvent="CustomerResetting">
+               CustomerResetEvent="CustomerResetting"
+               UpdateCustomerEvent="CustomerUpdating"
+               DeleteCustomerEvent="CustomerDeleting">
 </TestComponent>
 
 
@@ -60,6 +62,18 @@ Customers:
             Name = Name
         };
         await CustomerService.AddCustomer(customer);
+        Customers = await CustomerService.GetAllCustomers();
+    }
+
+    async Task CustomerUpdating(Customer Customer)
+    {
+        await CustomerService.UpdateCustomer(Customer);
+        Customers = await CustomerService.GetAllCustomers();
+    }
+
+    async Task CustomerDeleting(Customer Customer)
+    {
+        await CustomerService.DeleteCustomer(Customer.CustomerId);
         Customers = await CustomerService.GetAllCustomers();
     }
 }

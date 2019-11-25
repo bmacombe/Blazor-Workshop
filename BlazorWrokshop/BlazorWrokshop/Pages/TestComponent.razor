@@ -19,4 +19,6 @@ Add Customer: <input @bind="@NewCustomerName" />
     <input @bind="@SelectedCustomer.Name"
             @bind:event="oninput" />
     <button @onclick="ResetButtonClicked">Reset</button>
+    <button @onclick="UpdateButtonClicked">Update</button>
+    <button @onclick="DeleteButtonClicked">Delete</button>
 }
