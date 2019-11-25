@@ -4,6 +4,8 @@
 @using BandBookerData.Models;
 @using Microsoft.AspNetCore.Components;
 @using Microsoft.AspNetCore.SignalR.Client;
+@using Microsoft.Extensions.Configuration;
+@inject IConfiguration Configuration;
 
 
 <h2>Instruments</h2>
@@ -811,11 +813,14 @@
 
     protected override async Task OnInitializedAsync()
     {
+        string baseUrl = Configuration["BaseURL"];
+
+
         AllInstruments = await ApiService.GetInstruments();
 
 
         connection = new Microsoft.AspNetCore.SignalR.Client.HubConnectionBuilder()
-            .WithUrl("https://localhost:44303/adminHub")
+            .WithUrl(baseUrl + "adminHub")
             .Build();
 
 
