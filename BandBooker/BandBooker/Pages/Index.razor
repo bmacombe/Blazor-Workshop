@@ -5,12 +5,13 @@
 
 
 <h2>Instruments</h2>
-<select size="10" style="width:100%;"
-        disabled="@DisableInstrumentList">
+<select @onchange="InstrumentSelected"
+            size="10" style="width:100%;"
+            disabled="@DisableInstrumentList">
     @foreach (var instrument in AllInstruments)
     {
         @if (SelectedInstrument != null
-             && instrument.InstrumentId == SelectedInstrument.InstrumentId)
+    && instrument.InstrumentId == SelectedInstrument.InstrumentId)
         {
             <option selected value="@instrument.InstrumentId.ToString()">
                 @instrument.Name
@@ -24,11 +25,28 @@
 </select>
 <br />
 
+<button disabled="@DisableInstrumentList" @onclick="NewInstrumentButtonClick">New</button>
+<span>&nbsp;</span>
+
+
+<button disabled="@DisableInstrumentEditButton" @onclick="EditInstrumentButtonClick">Edit</button>
+<span>&nbsp;</span>
+
+
+<button disabled="@DisableInstrumentEditButton" @onclick="DeleteInstrumentButtonClick">Delete</button>
+<span>&nbsp;</span>
+
+
+<br />
+<span style="color:red;">@InstrumentErrorMessage</span>
+
 
 @code {
 
 
     bool DisableInstrumentList = false;
+    bool DisableInstrumentEditButton = true;
+    string InstrumentErrorMessage = "";
     Instrument SelectedInstrument;
     List<Instrument> AllInstruments = new List<Instrument>();
 
@@ -36,5 +54,53 @@
     protected override void OnInitialized()
     {
         AllInstruments = DataManager.Instruments;
+    }
+
+    void InstrumentSelected(ChangeEventArgs args)
+    {
+        InstrumentErrorMessage = "";
+        string instrumentId = args.Value.ToString();
+        SelectedInstrument =
+           (from x in DataManager.Instruments
+            where x.InstrumentId.ToString() == instrumentId.ToString()
+            select x).First();
+        if (SelectedInstrument != null)
+            DisableInstrumentEditButton = false;
+        else
+            DisableInstrumentEditButton = true;
+    }
+
+
+    void NewInstrumentButtonClick()
+    {
+
+
+    }
+
+
+    void EditInstrumentButtonClick()
+    {
+
+
+    }
+
+
+    void DeleteInstrumentButtonClick()
+    {
+        if (SelectedInstrument != null)
+        {
+            InstrumentErrorMessage = DataManager.DeleteInstrument(SelectedInstrument);
+            if (InstrumentErrorMessage == "")
+            {
+                AllInstruments.Remove((from x in AllInstruments
+                    where x.InstrumentId 
+                          == SelectedInstrument.InstrumentId
+                    select x).First());
+                if (AllInstruments.Count > 0)
+                {
+                    SelectedInstrument = AllInstruments.First();
+                }
+            }
+        }
     }
 }
