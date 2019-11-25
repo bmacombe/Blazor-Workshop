@@ -1,0 +1,40 @@
+﻿<select @onchange="CustomerSelected"
+        size="4" style="width:100%">
+    @foreach (var customer in @Customers)
+    {
+        <option value="@customer.CustomerId.ToString()">@customer.Name</option>
+    }
+</select>
+
+
+@if (SelectedCustomer != null)
+{
+    <span style="color:red">@SelectedCustomer.Name selected with CustomerID @SelectedCustomer.CustomerId</span>
+
+    <br />
+    <br />
+
+    <input @bind="@SelectedCustomer.Name" @bind:event="oninput"/>
+}
+
+@code {
+    Customer SelectedCustomer;
+    //string DisplayMessage = "";
+
+    [Parameter]
+    public List<Customer> Customers { get; set; } = new List<Customer>();
+
+    void CustomerSelected(ChangeEventArgs args)
+    {
+        SelectedCustomer = (from x in Customers
+                            where x.CustomerId.ToString()
+                                  == args.Value.ToString()
+                            select x).First();
+
+
+        //DisplayMessage =
+        //    string.Format("Customer {0} selected with CustomerId {1}",
+        //        SelectedCustomer.Name,
+        //        SelectedCustomer.CustomerId);
+    }
+}

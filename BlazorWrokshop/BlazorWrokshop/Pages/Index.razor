@@ -1,0 +1,41 @@
+﻿@page "/"
+
+
+Customers:
+<TestComponent 
+    Customers="Customers">
+</TestComponent>
+
+
+@code {
+
+
+    List<Customer> Customers = new List<Customer>();
+
+
+    protected override void OnInitialized()
+    {
+        Customers.Add(
+            new Customer
+            {
+                CustomerId = 1,
+                Name = "Isadora Jarr"
+            });
+
+
+        Customers.Add(
+            new Customer
+            {
+                CustomerId = 2,
+                Name = "Ben Slackin"
+            });
+
+
+        Customers.Add(
+            new Customer
+            {
+                CustomerId = 3,
+                Name = "Doo Fuss"
+            });
+    }
+}
