@@ -53,15 +53,12 @@ Customers:
         }
     }
 
-    async Task CustomerAdding(string Name)
+    async Task CustomerAdding(Customer Customer)
     {
         var highest = Customers.OrderByDescending(i => i.CustomerId).Take(1).First();
-        var customer = new Customer()
-        {
-            CustomerId = highest.CustomerId + 1,
-            Name = Name
-        };
-        await CustomerService.AddCustomer(customer);
+        Customer.CustomerId = highest.CustomerId + 1;
+        await CustomerService.AddCustomer(Customer);
+        SelectedCustomer = Customer;
         Customers = await CustomerService.GetAllCustomers();
     }
 

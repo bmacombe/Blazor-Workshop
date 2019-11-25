@@ -37,20 +37,28 @@ namespace BlazorWrokshop.Pages
 
 
         [Parameter]
-        public EventCallback<string> AddCustomerEvent { get; set; }
+        public EventCallback<Customer> AddCustomerEvent { get; set; }
+        bool Adding = false;
 
-
-        public async Task CustomerAdding()
+        public void CustomerAdding()
         {
-            await AddCustomerEvent.InvokeAsync(NewCustomerName);
-            NewCustomerName = string.Empty;
+            SelectedCustomer = new Customer();
+            Adding = true;
         }
 
         [Parameter]
         public EventCallback<Customer> UpdateCustomerEvent { get; set; }
         public async Task UpdateButtonClicked()
         {
-            await UpdateCustomerEvent.InvokeAsync(SelectedCustomer);
+            if (Adding)
+            {
+                Adding = false;
+                await AddCustomerEvent.InvokeAsync(SelectedCustomer);
+            }
+            else
+            {
+                await UpdateCustomerEvent.InvokeAsync(SelectedCustomer);
+            }
         }
 
         [Parameter]
