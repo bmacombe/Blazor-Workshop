@@ -62,10 +62,10 @@ namespace BlazorWrokshop.Pages
         }
 
         [Parameter]
-        public EventCallback<Customer> DeleteCustomerEvent { get; set; }
+        public EventCallback<int> DeleteCustomerEvent { get; set; }
         public async Task DeleteButtonClicked()
         {
-            await DeleteCustomerEvent.InvokeAsync(SelectedCustomer);
+            await DeleteCustomerEvent.InvokeAsync(SelectedCustomer.CustomerId);
         }
     }
 }

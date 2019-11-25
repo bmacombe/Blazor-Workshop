@@ -13,16 +13,13 @@ Customers:
 </TestComponent>
 
 
-@if (SelectedCustomer != null)
-{
-    <br />
-    <br />
-    <span style="color:green;">Customer Selected: @SelectedCustomer.Name</span>;
-}
+<span style="color:@MessageColor;">@DisplayMessage</span>
 
 
 @code {
 
+    string DisplayMessage = "";
+    string MessageColor = "green";
 
     List<Customer> Customers = new List<Customer>();
 
@@ -38,39 +35,97 @@ Customers:
 
     protected override async Task OnInitializedAsync()
     {
-        Customers = await CustomerService.GetAllCustomers();
+        try
+        {
+            Customers = await CustomerService.GetAllCustomers();
+        }
+        catch (Exception ex)
+        {
+            MessageColor = "red";
+            DisplayMessage = "Could not get customer data";
+        }
     }
 
     async Task CustomerResetting(int CustomerId)
     {
-        var originalCustomer = await CustomerService.GetCustomer(CustomerId);
-        if (originalCustomer != null)
+        try
         {
+            var originalCustomer = await CustomerService.GetCustomer(CustomerId);
+            if (originalCustomer != null)
+            {
     // replace the customer and reset the SelectedCustomer
-            Customers[Customers.FindIndex(
-                x => x.CustomerId == CustomerId)] = originalCustomer;
-            SelectedCustomer = originalCustomer;
+                Customers[Customers.FindIndex(
+                    x => x.CustomerId == CustomerId)] = originalCustomer;
+                SelectedCustomer = originalCustomer;
+                MessageColor = "green";
+                DisplayMessage = "Customer restored";
+
+            }
+            else
+            {
+                MessageColor = "red";
+                DisplayMessage = "Could not load existing customer";
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageColor = "red";
+            DisplayMessage = "Could not reset customer";
         }
     }
 
     async Task CustomerAdding(Customer Customer)
     {
-        var highest = Customers.OrderByDescending(i => i.CustomerId).Take(1).First();
-        Customer.CustomerId = highest.CustomerId + 1;
-        await CustomerService.AddCustomer(Customer);
-        SelectedCustomer = Customer;
-        Customers = await CustomerService.GetAllCustomers();
+        try
+        {
+            var highest = Customers.OrderByDescending(i => i.CustomerId).Take(1).First();
+            Customer.CustomerId = highest.CustomerId + 1;
+            await CustomerService.AddCustomer(Customer);
+            SelectedCustomer = Customer;
+            Customers = await CustomerService.GetAllCustomers();
+            MessageColor = "green";
+            DisplayMessage = "Customer added";
+        }
+        catch (Exception ex)
+        {
+            MessageColor = "red";
+            DisplayMessage = "Could not add customer";
+        }
     }
 
     async Task CustomerUpdating(Customer Customer)
     {
-        await CustomerService.UpdateCustomer(Customer);
-        Customers = await CustomerService.GetAllCustomers();
+        try
+        {
+            await CustomerService.UpdateCustomer(Customer);
+            Customers = await CustomerService.GetAllCustomers();
+            MessageColor = "green";
+            DisplayMessage = "Customer updated";
+        }
+        catch (Exception ex)
+        {
+            MessageColor = "red";
+            DisplayMessage = "Could not update customer";
+        }
     }
 
-    async Task CustomerDeleting(Customer Customer)
+    async Task CustomerDeleting(int CustomerId)
     {
-        await CustomerService.DeleteCustomer(Customer.CustomerId);
-        Customers = await CustomerService.GetAllCustomers();
+        try
+        {
+            await CustomerService.DeleteCustomer(CustomerId);
+            Customers = await CustomerService.GetAllCustomers();
+            if (Customers.Count > 0)
+            {
+                SelectedCustomer = Customers.First();
+            }
+            MessageColor = "green";
+            DisplayMessage = "Customer deleted";
+        }
+        catch (Exception ex)
+        {
+            MessageColor = "red";
+            DisplayMessage = "Could not delete customer";
+        }
     }
 }

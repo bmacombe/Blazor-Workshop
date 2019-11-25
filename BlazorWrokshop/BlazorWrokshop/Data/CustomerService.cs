@@ -15,37 +15,23 @@ namespace BlazorWrokshop.Data
 
         public static async Task<List<Customer>> GetAllCustomers()
         {
-            try
+            using (var http = new HttpClient())
             {
-                using (var http = new HttpClient())
-                {
-                    var uri = new Uri(baseURL + "api/customer");
-                    string json = await http.GetStringAsync(uri);
-                    var customers = JsonConvert.DeserializeObject<List<Customer>>(json);
-                    return customers;
-                }
-            }
-            catch (Exception ex)
-            {
-                return new List<Customer>();
+                var uri = new Uri(baseURL + "api/customer");
+                string json = await http.GetStringAsync(uri);
+                var customers = JsonConvert.DeserializeObject<List<Customer>>(json);
+                return customers;
             }
         }
 
         public static async Task<Customer> GetCustomer(int CustomerId)
         {
-            try
+            using (var http = new HttpClient())
             {
-                using (var http = new HttpClient())
-                {
-                    var uri = new Uri(baseURL + "api/customer/" + CustomerId.ToString());
-                    string json = await http.GetStringAsync(uri);
-                    var customer = JsonConvert.DeserializeObject<Customer>(json);
-                    return customer;
-                }
-            }
-            catch (Exception ex)
-            {
-                return new Customer();
+                var uri = new Uri(baseURL + "api/customer/" + CustomerId.ToString());
+                string json = await http.GetStringAsync(uri);
+                var customer = JsonConvert.DeserializeObject<Customer>(json);
+                return customer;
             }
         }
 
