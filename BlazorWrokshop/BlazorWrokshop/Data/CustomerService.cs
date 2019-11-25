@@ -82,8 +82,11 @@ namespace BlazorWrokshop.Data
             using (var http = new HttpClient())
             {
                 var uri = new Uri(baseURL + "api/customer/" + CustomerId);
-                await http.DeleteAsync(uri);
-
+                var result = await http.DeleteAsync(uri);
+                if (result.StatusCode != System.Net.HttpStatusCode.OK)
+                {
+                    throw new Exception("Customer was not deleted");
+                }
             }
         }
     }
