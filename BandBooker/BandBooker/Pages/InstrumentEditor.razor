@@ -1,6 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Components.Web
 @using BandBookerData.Models
-
+@inject IJSRuntime js;
 
 @if (@ShowInstrumentPanel == true)
 {
@@ -10,7 +10,7 @@
                 <DataAnnotationsValidator />
                 <ValidationSummary />
                 Name:
-                <InstantInputText @bind-Value="@Instrument.Name"
+                <InstantInputText id="instrument.name" @bind-Value="@Instrument.Name"
                                                    type="text" style="width:100%;" />
                 <br /><br />
                 <button type="submit">@SubmitButtonText</button>
@@ -46,19 +46,21 @@
         ShowInstrumentPanel = false;
     }
 
-    public void NewInstrument()
+    public async Task NewInstrument()
     {
         Adding = true;
         SubmitButtonText = "Add";
         ShowInstrumentPanel = true;
+        await js.InvokeVoidAsync("SetFocus", "instrument.name");
     }
 
 
-    public void EditInstrument()
+    public async Task EditInstrument()
     {
         Adding = false;
         SubmitButtonText = "Update";
         ShowInstrumentPanel = true;
+        await js.InvokeVoidAsync("SetFocus", "instrument.name");
     }
 
     async Task SubmitButtonPressed()

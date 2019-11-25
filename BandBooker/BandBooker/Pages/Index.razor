@@ -40,6 +40,14 @@
 <br />
 <span style="color:red;">@InstrumentErrorMessage</span>
 
+<InstrumentEditor @ref="instrumentEditor"
+                   Instrument ="SelectedInstrument"
+                   CancelPressed="InstrumentCancelled"
+                   InstrumentAdded="InstrumentAdded"
+                   InstrumentUpdated="InstrumentUpdated">
+</InstrumentEditor>
+<br />
+<br />
 
 @code {
 
@@ -50,6 +58,49 @@
     Instrument SelectedInstrument;
     List<Instrument> AllInstruments = new List<Instrument>();
 
+    InstrumentEditor instrumentEditor;
+
+
+    void InstrumentCancelled(string message)
+    {
+        if (SelectedInstrument != null)
+        {
+            SelectedInstrument = 
+                (from x in DataManager.Instruments
+                    where x.InstrumentId == SelectedInstrument.InstrumentId
+                    select x).FirstOrDefault();
+        }
+        InstrumentErrorMessage = message;
+        DisableInstrumentList = false;
+        DisableInstrumentEditButton = (SelectedInstrument == null);
+    }
+
+
+    void InstrumentAdded(Instrument instrument)
+    {
+        DataManager.AddInstrument(instrument);
+        DisableInstrumentList = false;
+        DisableInstrumentEditButton = (SelectedInstrument == null);
+        AllInstruments = DataManager.Instruments;
+        SelectedInstrument = AllInstruments.Last();
+        instrumentEditor.Hide();
+    }
+
+
+    void InstrumentUpdated(string message)
+    {
+        SelectedInstrument = DataManager.UpdateInstrument(SelectedInstrument);
+
+
+        AllInstruments[AllInstruments.FindIndex(
+            x => x.InstrumentId == SelectedInstrument.InstrumentId)]
+            = SelectedInstrument;
+
+
+        DisableInstrumentList = false;
+        DisableInstrumentEditButton = false;
+        instrumentEditor.Hide();
+    }
 
     protected override void OnInitialized()
     {
@@ -73,15 +124,19 @@
 
     void NewInstrumentButtonClick()
     {
-
-
+        InstrumentErrorMessage = "";
+        DisableInstrumentList = true;
+        DisableInstrumentEditButton = true;
+        SelectedInstrument = new Instrument();
+        instrumentEditor.NewInstrument();
     }
 
 
     void EditInstrumentButtonClick()
     {
-
-
+        DisableInstrumentList = true;
+        DisableInstrumentEditButton = true;
+        instrumentEditor.EditInstrument();
     }
 
 
