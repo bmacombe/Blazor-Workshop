@@ -7,8 +7,16 @@ namespace BlazorWrokshop.Pages
 {
     public class TestComponentCode : ComponentBase
     {
-        public Customer SelectedCustomer;
-        //string DisplayMessage = "";
+        [Parameter]
+        public Customer SelectedCustomer { get; set; }
+
+        [Parameter]
+        public EventCallback<int> CustomerResetEvent { get; set; }
+
+        public async Task ResetButtonClicked()
+        {
+            await CustomerResetEvent.InvokeAsync(SelectedCustomer.CustomerId);
+        }
 
         [Parameter]
         public List<Customer> Customers { get; set; } = new List<Customer>();

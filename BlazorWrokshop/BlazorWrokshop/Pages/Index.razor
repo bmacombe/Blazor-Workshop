@@ -1,30 +1,52 @@
 ﻿@page "/"
 @using BlazorWrokshop.Data
 
+
 Customers:
 <TestComponent Customers="Customers"
-               CustomerSelectEvent="CustomerSelected">
+               SelectedCustomer ="SelectedCustomer"
+               CustomerSelectEvent="CustomerSelected"
+               CustomerResetEvent="CustomerResetting">
 </TestComponent>
-<br />
-<br />
-<span style="color:green;">@DisplayMessage</span>
+
+
+@if (SelectedCustomer != null)
+{
+    <br />
+    <br />
+    <span style="color:green;">Customer Selected: @SelectedCustomer.Name</span>;
+}
+
 
 @code {
 
-    string DisplayMessage = "";
+
+    List<Customer> Customers = new List<Customer>();
+
+
+    Customer SelectedCustomer;
 
 
     void CustomerSelected(Customer customer)
     {
-        DisplayMessage = string.Format("Event Raised. Customer Selected: {0}",
-            customer.Name);
+        SelectedCustomer = customer;
     }
-
-    List<Customer> Customers = new List<Customer>();
 
 
     protected override async Task OnInitializedAsync()
     {
         Customers = await CustomerService.GetAllCustomers();
+    }
+
+    async Task CustomerResetting(int CustomerId)
+    {
+        var originalCustomer = await CustomerService.GetCustomer(CustomerId);
+        if (originalCustomer != null)
+        {
+    // replace the customer and reset the SelectedCustomer
+            Customers[Customers.FindIndex(
+                x => x.CustomerId == CustomerId)] = originalCustomer;
+            SelectedCustomer = originalCustomer;
+        }
     }
 }
