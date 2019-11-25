@@ -19,6 +19,10 @@
 
 <script src="_framework/blazor.server.js"></script>
 <script>
+    window.GetInputValue = (Id) => {
+        var elem = document.getElementById(Id);
+        return elem.value;
+    };
     window.SetFocus = (Id) => {
         setTimeout(internalFocus, 10, Id);
     };
@@ -26,7 +30,6 @@
         var element = document.getElementById(Id);
         if (element == null) {
             setTimeout(internalFocus, 10, Id);
-            return;
         }
         element.focus();
         element.select();

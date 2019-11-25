@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using BandBooker.Areas.Identity;
 using BandBooker.Data;
+using BandBooker.Hubs;
 using Blazor.FileReader;
 
 namespace BandBooker
@@ -45,6 +46,7 @@ namespace BandBooker
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddSingleton<WeatherForecastService>();
             services.AddFileReaderService(options => options.InitializeOnFirstCall = true);
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -75,6 +77,7 @@ namespace BandBooker
                 endpoints.MapControllers();
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
+                endpoints.MapHub<AdminHub>("/adminHub");
             });
         }
     }

@@ -27,13 +27,15 @@
                 <InstantInputText @bind-Value="@Musician.MobilePhone"
                                                    type="text" style="width:100%;" />
                 <br /><br />
-                Bio:
-                <textarea id="BioControl" @bind="@Musician.Bio"
-                                       rows="4"
-                                       style="width: 100%; overflow: hidden;
-                    overflow-wrap: break-word;
-                    overflow-y: scroll; " />
-                <br />
+                            Bio:
+            <textarea id="BioControl" @bind="@Musician.Bio"
+                      bind:event="oninput"
+                      @onkeyup="SyncMusicianBio"
+                      rows="4"
+                      style="width: 100%; overflow: hidden;
+                        overflow-wrap: break-word;
+                        overflow-y: scroll; " />
+            <br />
                 <table style="width:100%">
                     <tr>
                         <td style="width:45%;" valign="top">
@@ -156,6 +158,9 @@
         MusicianUpdated
     { get; set; }
 
+    [Parameter]
+    public EventCallback<string> BioUpdated { get; set; }
+
 
     Musician Musician { get; set; } = new Musician();
     bool ShowMusicianPanel = false;
@@ -166,7 +171,27 @@
     bool Adding = false;
     string SubmitButtonText = "";
 
+    async Task SyncMusicianBio(KeyboardEventArgs e)
+    {
+        try
+        {
+            var value = await js.InvokeAsync<string>("GetInputValue", "BioControl");
+            await BioUpdated.InvokeAsync(value);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
 
+    public void UpdateMusicianBio(int MusicianId, string Bio)
+    {
+        if (Musician != null && Musician.MusicianId == MusicianId)
+        {
+            Musician.Bio = Bio;
+            StateHasChanged();
+        }
+    }
 
 
     public void Hide()

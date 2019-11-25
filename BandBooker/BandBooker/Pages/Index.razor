@@ -3,6 +3,7 @@
 @using BandBookerData;
 @using BandBookerData.Models;
 @using Microsoft.AspNetCore.Components;
+@using Microsoft.AspNetCore.SignalR.Client;
 
 
 <h2>Instruments</h2>
@@ -95,13 +96,14 @@
 <MusicianEditor @ref="musicianEditor"
                 CancelPressed="EditMusicianCancelled"
                 MusicianAdded="MusicianAdded"
-                MusicianUpdated="MusicianUpdated">
+                MusicianUpdated="MusicianUpdated"
+                BioUpdated="MusicianBioUpdated">
 </MusicianEditor>
 <br />
 <br />
 
 @code {
-    
+
     #region Instruments
 
 
@@ -212,7 +214,29 @@
     MusicianEditor musicianEditor;
     bool DisableMusicianControls = false;
     bool DisableMusicianEditButton = true;
+    HubConnection connection;
 
+    void OnReceiveSyncMusicianBio(int MusicianId, string Bio)
+    {
+        var musician = (from x in DataManager.Musicians
+            where x.MusicianId == MusicianId
+            select x).FirstOrDefault();
+
+
+        if (musician != null)
+        {
+            musicianEditor.UpdateMusicianBio(MusicianId, Bio);
+        }
+    }
+
+    async Task MusicianBioUpdated(string bio)
+    {
+        if (SelectedMusician != null)
+        {
+            await connection.InvokeAsync("SyncMusicianBio",
+                SelectedMusician.MusicianId, bio);
+        }
+    }
 
     void EditMusicianCancelled(string message)
     {
@@ -312,5 +336,24 @@
     protected override async Task OnInitializedAsync()
     {
         AllInstruments = await ApiService.GetInstruments();
+
+
+        connection = new Microsoft.AspNetCore.SignalR.Client.HubConnectionBuilder()
+            .WithUrl("https://localhost:44303/adminHub")
+            .Build();
+
+
+        connection.On<int, string>("ReceiveSyncMusicianBio", 
+            this.OnReceiveSyncMusicianBio);
+
+
+        try
+        {
+            await connection.StartAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
     }
 }
