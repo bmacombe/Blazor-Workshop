@@ -5044,11 +5044,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "S:\\OneDrive\\Desktop\\Blazor Workshop\\BandBookerData\\BandBookerData.csproj",
+      "projectUniqueName": "S:\\Github\\Blazor Workshop\\BandBookerData\\BandBookerData.csproj",
       "projectName": "BandBookerData",
-      "projectPath": "S:\\OneDrive\\Desktop\\Blazor Workshop\\BandBookerData\\BandBookerData.csproj",
+      "projectPath": "S:\\Github\\Blazor Workshop\\BandBookerData\\BandBookerData.csproj",
       "packagesPath": "C:\\Users\\bmaco_000\\.nuget\\packages\\",
-      "outputPath": "S:\\OneDrive\\Desktop\\Blazor Workshop\\BandBookerData\\obj\\",
+      "outputPath": "S:\\Github\\Blazor Workshop\\BandBookerData\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Microsoft\\Xamarin\\NuGet\\",

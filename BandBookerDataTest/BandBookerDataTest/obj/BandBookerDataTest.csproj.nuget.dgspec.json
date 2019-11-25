@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "S:\\OneDrive\\Desktop\\Blazor Workshop\\BandBookerDataTest\\BandBookerDataTest\\BandBookerDataTest.csproj": {}
+    "S:\\Github\\Blazor Workshop\\BandBookerDataTest\\BandBookerDataTest\\BandBookerDataTest.csproj": {}
   },
   "projects": {
-    "S:\\OneDrive\\Desktop\\Blazor Workshop\\BandBookerDataTest\\BandBookerDataTest\\BandBookerDataTest.csproj": {
+    "S:\\Github\\Blazor Workshop\\BandBookerDataTest\\BandBookerDataTest\\BandBookerDataTest.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "S:\\OneDrive\\Desktop\\Blazor Workshop\\BandBookerDataTest\\BandBookerDataTest\\BandBookerDataTest.csproj",
+        "projectUniqueName": "S:\\Github\\Blazor Workshop\\BandBookerDataTest\\BandBookerDataTest\\BandBookerDataTest.csproj",
         "projectName": "BandBookerDataTest",
-        "projectPath": "S:\\OneDrive\\Desktop\\Blazor Workshop\\BandBookerDataTest\\BandBookerDataTest\\BandBookerDataTest.csproj",
+        "projectPath": "S:\\Github\\Blazor Workshop\\BandBookerDataTest\\BandBookerDataTest\\BandBookerDataTest.csproj",
         "packagesPath": "C:\\Users\\bmaco_000\\.nuget\\packages\\",
-        "outputPath": "S:\\OneDrive\\Desktop\\Blazor Workshop\\BandBookerDataTest\\BandBookerDataTest\\obj\\",
+        "outputPath": "S:\\Github\\Blazor Workshop\\BandBookerDataTest\\BandBookerDataTest\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\",
@@ -32,8 +32,8 @@
         "frameworks": {
           "netcoreapp3.0": {
             "projectReferences": {
-              "S:\\OneDrive\\Desktop\\Blazor Workshop\\BandBookerData\\BandBookerData.csproj": {
-                "projectPath": "S:\\OneDrive\\Desktop\\Blazor Workshop\\BandBookerData\\BandBookerData.csproj"
+              "S:\\Github\\Blazor Workshop\\BandBookerData\\BandBookerData.csproj": {
+                "projectPath": "S:\\Github\\Blazor Workshop\\BandBookerData\\BandBookerData.csproj"
               }
             }
           }
@@ -73,14 +73,14 @@
         }
       }
     },
-    "S:\\OneDrive\\Desktop\\Blazor Workshop\\BandBookerData\\BandBookerData.csproj": {
+    "S:\\Github\\Blazor Workshop\\BandBookerData\\BandBookerData.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "S:\\OneDrive\\Desktop\\Blazor Workshop\\BandBookerData\\BandBookerData.csproj",
+        "projectUniqueName": "S:\\Github\\Blazor Workshop\\BandBookerData\\BandBookerData.csproj",
         "projectName": "BandBookerData",
-        "projectPath": "S:\\OneDrive\\Desktop\\Blazor Workshop\\BandBookerData\\BandBookerData.csproj",
+        "projectPath": "S:\\Github\\Blazor Workshop\\BandBookerData\\BandBookerData.csproj",
         "packagesPath": "C:\\Users\\bmaco_000\\.nuget\\packages\\",
-        "outputPath": "S:\\OneDrive\\Desktop\\Blazor Workshop\\BandBookerData\\obj\\",
+        "outputPath": "S:\\Github\\Blazor Workshop\\BandBookerData\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\",
