@@ -1,41 +1,30 @@
 ﻿@page "/"
-
+@using BlazorWrokshop.Data
 
 Customers:
-<TestComponent 
-    Customers="Customers">
+<TestComponent Customers="Customers"
+               CustomerSelectEvent="CustomerSelected">
 </TestComponent>
-
+<br />
+<br />
+<span style="color:green;">@DisplayMessage</span>
 
 @code {
 
+    string DisplayMessage = "";
+
+
+    void CustomerSelected(Customer customer)
+    {
+        DisplayMessage = string.Format("Event Raised. Customer Selected: {0}",
+            customer.Name);
+    }
 
     List<Customer> Customers = new List<Customer>();
 
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        Customers.Add(
-            new Customer
-            {
-                CustomerId = 1,
-                Name = "Isadora Jarr"
-            });
-
-
-        Customers.Add(
-            new Customer
-            {
-                CustomerId = 2,
-                Name = "Ben Slackin"
-            });
-
-
-        Customers.Add(
-            new Customer
-            {
-                CustomerId = 3,
-                Name = "Doo Fuss"
-            });
+        Customers = await CustomerService.GetAllCustomers();
     }
 }

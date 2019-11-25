@@ -54,6 +54,7 @@ namespace BlazorWrokshop
             {
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
+                endpoints.MapControllers();
             });
         }
     }
