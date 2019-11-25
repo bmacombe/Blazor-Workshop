@@ -11,7 +11,7 @@
     @foreach (var instrument in AllInstruments)
     {
         @if (SelectedInstrument != null
-    && instrument.InstrumentId == SelectedInstrument.InstrumentId)
+  && instrument.InstrumentId == SelectedInstrument.InstrumentId)
         {
             <option selected value="@instrument.InstrumentId.ToString()">
                 @instrument.Name
@@ -24,6 +24,7 @@
     }
 </select>
 <br />
+
 
 <button disabled="@DisableInstrumentList" @onclick="NewInstrumentButtonClick">New</button>
 <span>&nbsp;</span>
@@ -40,16 +41,21 @@
 <br />
 <span style="color:red;">@InstrumentErrorMessage</span>
 
+
 <InstrumentEditor @ref="instrumentEditor"
-                   Instrument ="SelectedInstrument"
-                   CancelPressed="InstrumentCancelled"
-                   InstrumentAdded="InstrumentAdded"
-                   InstrumentUpdated="InstrumentUpdated">
+                           Instrument="SelectedInstrument"
+                           CancelPressed="InstrumentCancelled"
+                           InstrumentAdded="InstrumentAdded"
+                           InstrumentUpdated="InstrumentUpdated">
 </InstrumentEditor>
 <br />
 <br />
 
+
 @code {
+
+
+    #region Instruments
 
 
     bool DisableInstrumentList = false;
@@ -57,7 +63,6 @@
     string InstrumentErrorMessage = "";
     Instrument SelectedInstrument;
     List<Instrument> AllInstruments = new List<Instrument>();
-
     InstrumentEditor instrumentEditor;
 
 
@@ -65,10 +70,10 @@
     {
         if (SelectedInstrument != null)
         {
-            SelectedInstrument = 
-                (from x in DataManager.Instruments
-                    where x.InstrumentId == SelectedInstrument.InstrumentId
-                    select x).FirstOrDefault();
+            SelectedInstrument =
+               (from x in DataManager.Instruments
+                where x.InstrumentId == SelectedInstrument.InstrumentId
+                select x).FirstOrDefault();
         }
         InstrumentErrorMessage = message;
         DisableInstrumentList = false;
@@ -81,16 +86,14 @@
         DataManager.AddInstrument(instrument);
         DisableInstrumentList = false;
         DisableInstrumentEditButton = (SelectedInstrument == null);
-        AllInstruments = DataManager.Instruments;
-        SelectedInstrument = AllInstruments.Last();
         instrumentEditor.Hide();
+        AllInstruments.Add(instrument);
     }
 
 
     void InstrumentUpdated(string message)
     {
         SelectedInstrument = DataManager.UpdateInstrument(SelectedInstrument);
-
 
         AllInstruments[AllInstruments.FindIndex(
             x => x.InstrumentId == SelectedInstrument.InstrumentId)]
@@ -102,10 +105,12 @@
         instrumentEditor.Hide();
     }
 
+
     protected override void OnInitialized()
     {
         AllInstruments = DataManager.Instruments;
     }
+
 
     void InstrumentSelected(ChangeEventArgs args)
     {
@@ -122,21 +127,21 @@
     }
 
 
-    void NewInstrumentButtonClick()
+    async Task NewInstrumentButtonClick()
     {
         InstrumentErrorMessage = "";
         DisableInstrumentList = true;
         DisableInstrumentEditButton = true;
         SelectedInstrument = new Instrument();
-        instrumentEditor.NewInstrument();
+        await instrumentEditor.NewInstrument();
     }
 
 
-    void EditInstrumentButtonClick()
+    async Task EditInstrumentButtonClick()
     {
         DisableInstrumentList = true;
         DisableInstrumentEditButton = true;
-        instrumentEditor.EditInstrument();
+        await instrumentEditor.EditInstrument();
     }
 
 
@@ -148,9 +153,9 @@
             if (InstrumentErrorMessage == "")
             {
                 AllInstruments.Remove((from x in AllInstruments
-                    where x.InstrumentId 
-                          == SelectedInstrument.InstrumentId
-                    select x).First());
+                                       where x.InstrumentId
+                                       == SelectedInstrument.InstrumentId
+                                       select x).First());
                 if (AllInstruments.Count > 0)
                 {
                     SelectedInstrument = AllInstruments.First();
@@ -158,4 +163,5 @@
             }
         }
     }
+    #endregion
 }
