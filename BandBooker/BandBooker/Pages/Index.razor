@@ -1,5 +1,40 @@
 ﻿@page "/"
+@using BandBookerData;
+@using BandBookerData.Models;
+@using Microsoft.AspNetCore.Components;
 
-<h1>Hello, world!</h1>
 
-Welcome to your new app.
+<h2>Instruments</h2>
+<select size="10" style="width:100%;"
+        disabled="@DisableInstrumentList">
+    @foreach (var instrument in AllInstruments)
+    {
+        @if (SelectedInstrument != null
+             && instrument.InstrumentId == SelectedInstrument.InstrumentId)
+        {
+            <option selected value="@instrument.InstrumentId.ToString()">
+                @instrument.Name
+            </option>
+        }
+        else
+        {
+            <option value="@instrument.InstrumentId.ToString()">@instrument.Name</option>
+        }
+    }
+</select>
+<br />
+
+
+@code {
+
+
+    bool DisableInstrumentList = false;
+    Instrument SelectedInstrument;
+    List<Instrument> AllInstruments = new List<Instrument>();
+
+
+    protected override void OnInitialized()
+    {
+        AllInstruments = DataManager.Instruments;
+    }
+}
